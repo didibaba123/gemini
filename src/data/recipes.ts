@@ -1,0 +1,180 @@
+export interface Recipe {
+  id: number;
+  name: string;
+  nameEn: string;
+  category: string;
+  difficulty: "简单" | "中等" | "较难";
+  time: string;
+  servings: number;
+  ingredients: { name: string; amount: string }[];
+  steps: string[];
+  tips: string;
+}
+
+export const recipes: Recipe[] = [
+  {
+    id: 1,
+    name: "红烧肉",
+    nameEn: "Braised Pork Belly",
+    category: "硬菜",
+    difficulty: "中等",
+    time: "90 min",
+    servings: 4,
+    ingredients: [
+      { name: "五花肉", amount: "500g" },
+      { name: "冰糖", amount: "30g" },
+      { name: "生抽", amount: "2 勺" },
+      { name: "老抽", amount: "1 勺" },
+      { name: "料酒", amount: "2 勺" },
+      { name: "八角", amount: "2 颗" },
+      { name: "桂皮", amount: "1 小块" },
+      { name: "葱姜", amount: "适量" },
+    ],
+    steps: [
+      "五花肉切块，冷水下锅焯水去腥",
+      "锅中放少许油，加冰糖小火炒出糖色",
+      "放入肉块翻炒上色，加葱姜、八角、桂皮",
+      "加生抽、老抽、料酒，加开水没过肉块",
+      "大火烧开后转小火炖 60 分钟",
+      "大火收汁至浓稠即可",
+    ],
+    tips: "炒糖色时火候要小，糖色变枣红色时立即下肉",
+  },
+  {
+    id: 2,
+    name: "番茄炒蛋",
+    nameEn: "Scrambled Eggs with Tomato",
+    category: "家常菜",
+    difficulty: "简单",
+    time: "15 min",
+    servings: 2,
+    ingredients: [
+      { name: "番茄", amount: "2 个" },
+      { name: "鸡蛋", amount: "3 个" },
+      { name: "葱花", amount: "适量" },
+      { name: "白糖", amount: "1 小勺" },
+      { name: "盐", amount: "适量" },
+      { name: "食用油", amount: "适量" },
+    ],
+    steps: [
+      "番茄顶部划十字，开水烫后去皮切块",
+      "鸡蛋打散加少许盐搅匀",
+      "热锅凉油，倒入蛋液炒至凝固盛出",
+      "锅中留底油，放入番茄翻炒出汁",
+      "加入白糖和盐调味",
+      "倒回鸡蛋翻炒均匀，撒葱花出锅",
+    ],
+    tips: "番茄去皮口感更细腻，鸡蛋不要炒太老",
+  },
+  {
+    id: 3,
+    name: "清蒸鲈鱼",
+    nameEn: "Steamed Sea Bass",
+    category: "硬菜",
+    difficulty: "中等",
+    time: "25 min",
+    servings: 3,
+    ingredients: [
+      { name: "鲈鱼", amount: "1 条 (约 500g)" },
+      { name: "葱丝", amount: "一把" },
+      { name: "姜丝", amount: "适量" },
+      { name: "蒸鱼豉油", amount: "3 勺" },
+      { name: "料酒", amount: "1 勺" },
+      { name: "红椒丝", amount: "少许" },
+    ],
+    steps: [
+      "鲈鱼处理干净，鱼身两面各划三刀",
+      "鱼身抹料酒和少许盐，放姜丝腌制 10 分钟",
+      "盘底铺葱段和姜片，放上鱼",
+      "水开后上锅大火蒸 8-10 分钟",
+      "倒掉蒸出的汤汁，铺上葱丝和红椒丝",
+      "淋上蒸鱼豉油，浇一勺热油激香",
+    ],
+    tips: "蒸鱼时间不宜过长，鱼眼凸出发白即为熟透",
+  },
+  {
+    id: 4,
+    name: "麻婆豆腐",
+    nameEn: "Mapo Tofu",
+    category: "家常菜",
+    difficulty: "简单",
+    time: "20 min",
+    servings: 2,
+    ingredients: [
+      { name: "嫩豆腐", amount: "1 盒" },
+      { name: "猪肉末", amount: "100g" },
+      { name: "郫县豆瓣酱", amount: "1.5 勺" },
+      { name: "花椒粉", amount: "1 小勺" },
+      { name: "蒜末", amount: "适量" },
+      { name: "淀粉水", amount: "适量" },
+      { name: "葱花", amount: "适量" },
+    ],
+    steps: [
+      "豆腐切小块，淡盐水中浸泡 5 分钟",
+      "锅中放油，炒香肉末至变色",
+      "加入郫县豆瓣酱炒出红油",
+      "加入适量水烧开，轻轻放入豆腐",
+      "小火煮 5 分钟入味，加盐调味",
+      "淋入水淀粉勾芡，撒花椒粉和葱花",
+    ],
+    tips: "豆腐先用盐水泡可防止碎裂，勾芡要分次少量",
+  },
+  {
+    id: 5,
+    name: "可乐鸡翅",
+    nameEn: "Cola Chicken Wings",
+    category: "家常菜",
+    difficulty: "简单",
+    time: "30 min",
+    servings: 3,
+    ingredients: [
+      { name: "鸡翅中", amount: "12 个" },
+      { name: "可乐", amount: "1 罐 (330ml)" },
+      { name: "生抽", amount: "2 勺" },
+      { name: "老抽", amount: "1 勺" },
+      { name: "姜片", amount: "3 片" },
+      { name: "料酒", amount: "1 勺" },
+    ],
+    steps: [
+      "鸡翅两面各划两刀，便于入味",
+      "冷水下锅焯水，撇去浮沫捞出",
+      "锅中放少许油，放入鸡翅煎至两面金黄",
+      "加入姜片、生抽、老抽、料酒翻炒",
+      "倒入可乐，没过鸡翅，大火烧开",
+      "转中小火煮 15 分钟，大火收汁即可",
+    ],
+    tips: "可乐用普通可乐而非零度，糖分是上色的关键",
+  },
+  {
+    id: 6,
+    name: "蒜蓉西兰花",
+    nameEn: "Garlic Broccoli",
+    category: "素菜",
+    difficulty: "简单",
+    time: "10 min",
+    servings: 2,
+    ingredients: [
+      { name: "西兰花", amount: "1 颗" },
+      { name: "蒜末", amount: "5 瓣" },
+      { name: "蚝油", amount: "1 勺" },
+      { name: "盐", amount: "适量" },
+      { name: "食用油", amount: "适量" },
+    ],
+    steps: [
+      "西兰花掰成小朵，淡盐水浸泡 15 分钟",
+      "烧开水，加少许油和盐，焯水 1 分钟捞出",
+      "锅中放油，小火炒香蒜末",
+      "倒入西兰花大火翻炒",
+      "加蚝油和少许盐调味，翻炒均匀出锅",
+    ],
+    tips: "焯水时加油可保持翠绿色泽",
+  },
+];
+
+export const menuMeta = {
+  title: "私房菜谱",
+  subtitle: "Home Cooking Collection",
+  author: "didibaba123",
+  version: "v1.0",
+  description: "用心烹饪，用爱调味",
+};
