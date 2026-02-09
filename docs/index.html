@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leo's Private Recipes | 私房菜谱</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">Leo's Kitchen</a>
+      <div class="nav-links">
+        <a href="#recipes">菜谱</a>
+        <a href="#about">关于</a>
+        <a href="https://github.com/didibaba123/Leos-private-recipes" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">EST. 2025</div>
+      <h1 class="hero-title">私房菜谱</h1>
+      <p class="hero-subtitle">Leo's Private Recipes</p>
+      <div class="hero-divider"></div>
+      <p class="hero-desc">用心烹饪，用爱调味<br><span class="hero-desc-en">Cook with Heart, Season with Love</span></p>
+      <a href="#recipes" class="hero-cta">探索菜谱 &darr;</a>
+    </div>
+  </header>
+
+  <!-- Stats Bar (dynamically updated) -->
+  <section class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <span class="stat-number" id="stat-count">--</span>
+        <span class="stat-label">道菜谱</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number" id="stat-categories">--</span>
+        <span class="stat-label">个分类</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number" id="stat-time">--</span>
+        <span class="stat-label">分钟</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recipe Grid -->
+  <section class="recipes-section" id="recipes">
+    <div class="section-header">
+      <span class="section-tag">Menu</span>
+      <h2 class="section-title">全部菜谱</h2>
+      <p class="section-subtitle">每一道菜，都是一段故事</p>
+    </div>
+
+    <!-- Filter Tabs (dynamically generated) -->
+    <div class="filter-tabs" id="filter-tabs"></div>
+
+    <!-- Recipe cards rendered here by JS -->
+    <div class="recipe-grid" id="recipe-grid"></div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section" id="about">
+    <div class="about-inner">
+      <div class="about-content">
+        <span class="section-tag">About</span>
+        <h2 class="about-title">关于这个菜谱</h2>
+        <p class="about-text">
+          这是我个人收集和整理的家常菜谱集合。每道菜都经过多次实践和改良，力求在家庭厨房中也能做出餐厅级别的味道。
+        </p>
+        <p class="about-text">
+          菜谱持续更新中，欢迎 Star 和 Fork。如果你有好的菜谱推荐，也欢迎提 Issue 或 PR。
+        </p>
+        <div class="about-signature">
+          <div class="signature-line"></div>
+          <span>Leo's Kitchen &mdash; Since 2025</span>
+        </div>
+      </div>
+      <div class="about-features">
+        <div class="feature-card">
+          <div class="feature-icon">📖</div>
+          <h4>详细步骤</h4>
+          <p>每道菜都有详细的分步说明</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💡</div>
+          <h4>实用贴士</h4>
+          <p>分享烹饪过程中的关键技巧</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📸</div>
+          <h4>精美图片</h4>
+          <p>高清成品图和步骤图</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">Leo's Private Recipes</span>
+        <span class="footer-tagline">用心烹饪，用爱调味</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/didibaba123/Leos-private-recipes" target="_blank" rel="noopener">GitHub</a>
+        <span class="footer-sep">&middot;</span>
+        <a href="#recipes">菜谱</a>
+        <span class="footer-sep">&middot;</span>
+        <a href="#about">关于</a>
+      </div>
+      <div class="footer-copy">&copy; 2025 Leo's Kitchen. Open Source with ❤️</div>
+    </div>
+  </footer>
+
+  <script>
+    // ============================
+    // Data-driven recipe rendering
+    // ============================
+    const DIFFICULTY_CLASS = { '简单': 'badge-easy', '中等': 'badge-medium', '较难': 'badge-hard' };
+    const CLOCK_SVG = '<svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+    const PERSON_SVG = '<svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>';
+
+    function createRecipeCard(recipe) {
+      const imageContent = recipe.image
+        ? `<img src="images/${recipe.image}" alt="${recipe.name}" loading="lazy">`
+        : `<div class="recipe-card-placeholder"><span class="placeholder-emoji">${recipe.emoji}</span><span class="placeholder-text">添加图片</span></div>`;
+
+      return `
+        <article class="recipe-card" data-category="${recipe.category}">
+          <a href="recipes/${recipe.id}.html" class="recipe-card-link">
+            <div class="recipe-card-image">
+              ${imageContent}
+              <div class="recipe-card-badges">
+                <span class="badge badge-category">${recipe.category}</span>
+                <span class="badge badge-difficulty ${DIFFICULTY_CLASS[recipe.difficulty]}">${recipe.difficulty}</span>
+              </div>
+            </div>
+            <div class="recipe-card-body">
+              <h3 class="recipe-card-title">${recipe.name}</h3>
+              <p class="recipe-card-title-en">${recipe.nameEn}</p>
+              <div class="recipe-card-meta">
+                <span class="meta-item">${CLOCK_SVG} ${recipe.time}</span>
+                <span class="meta-item">${PERSON_SVG} ${recipe.servings} 人份</span>
+              </div>
+            </div>
+          </a>
+        </article>`;
+    }
+
+    function renderFilters(recipes) {
+      const categories = [...new Set(recipes.map(r => r.category))];
+      const tabs = document.getElementById('filter-tabs');
+      tabs.innerHTML = `<button class="filter-btn active" data-filter="all">全部</button>`
+        + categories.map(c => `<button class="filter-btn" data-filter="${c}">${c}</button>`).join('');
+
+      tabs.addEventListener('click', e => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+        tabs.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.recipe-card').forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = '';
+            card.style.animation = 'fadeInUp 0.4s ease forwards';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    }
+
+    function renderStats(recipes) {
+      const categories = new Set(recipes.map(r => r.category));
+      const times = recipes.map(r => parseInt(r.time)).filter(t => !isNaN(t));
+      const minTime = Math.min(...times);
+      const maxTime = Math.max(...times);
+      document.getElementById('stat-count').textContent = recipes.length;
+      document.getElementById('stat-categories').textContent = categories.size;
+      document.getElementById('stat-time').textContent = minTime === maxTime ? minTime : `${minTime}-${maxTime}`;
+    }
+
+    function initAnimations() {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+      document.querySelectorAll('.recipe-card, .feature-card, .about-content').forEach(el => {
+        el.classList.add('animate-target');
+        observer.observe(el);
+      });
+    }
+
+    // Load and render
+    fetch('recipes.json')
+      .then(res => res.json())
+      .then(recipes => {
+        document.getElementById('recipe-grid').innerHTML = recipes.map(createRecipeCard).join('');
+        renderFilters(recipes);
+        renderStats(recipes);
+        initAnimations();
+      });
+
+    // Smooth scroll
+    document.addEventListener('click', e => {
+      const anchor = e.target.closest('a[href^="#"]');
+      if (!anchor) return;
+      e.preventDefault();
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Navbar scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('nav-scrolled', window.scrollY > 80);
+    });
+  </script>
+
+</body>
+</html>

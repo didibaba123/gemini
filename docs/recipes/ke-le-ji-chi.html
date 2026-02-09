@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>菜谱 | Leo's Private Recipes</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/recipe-detail.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav nav-scrolled">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">Leo's Kitchen</a>
+      <div class="nav-links">
+        <a href="../index.html#recipes">菜谱</a>
+        <a href="../index.html#about">关于</a>
+        <a href="https://github.com/didibaba123/Leos-private-recipes" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Recipe Detail (dynamically rendered) -->
+  <main class="recipe-detail" id="recipe-detail">
+    <div class="recipe-loading">加载中...</div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">Leo's Private Recipes</span>
+        <span class="footer-tagline">用心烹饪，用爱调味</span>
+      </div>
+      <div class="footer-copy">&copy; 2025 Leo's Kitchen. Open Source with ❤️</div>
+    </div>
+  </footer>
+
+  <script>
+    // Get recipe ID from URL: recipes/hong-shao-rou.html → hong-shao-rou
+    const path = window.location.pathname;
+    const filename = path.substring(path.lastIndexOf('/') + 1);
+    const recipeId = filename.replace('.html', '');
+
+    fetch('../recipes.json')
+      .then(res => res.json())
+      .then(recipes => {
+        const recipe = recipes.find(r => r.id === recipeId);
+        if (!recipe) {
+          document.getElementById('recipe-detail').innerHTML = `
+            <div class="recipe-not-found">
+              <h2>菜谱未找到</h2>
+              <p>没有找到这道菜谱，<a href="../index.html">返回首页</a>看看其他的吧。</p>
+            </div>`;
+          return;
+        }
+
+        // Update page title
+        document.title = `${recipe.name} | Leo's Private Recipes`;
+
+        // Find prev/next recipes for navigation
+        const idx = recipes.indexOf(recipe);
+        const prev = idx > 0 ? recipes[idx - 1] : null;
+        const next = idx < recipes.length - 1 ? recipes[idx + 1] : null;
+
+        const heroImage = recipe.image
+          ? `<img src="../images/${recipe.image}" alt="${recipe.name}" class="detail-hero-img">`
+          : `<div class="detail-hero-placeholder"><span class="detail-hero-emoji">${recipe.emoji}</span></div>`;
+
+        const ingredientRows = recipe.ingredients.map(ing => `
+          <tr>
+            <td class="ing-name">${ing.name}</td>
+            <td class="ing-amount">${ing.amount}</td>
+          </tr>`).join('');
+
+        const stepItems = recipe.steps.map((step, i) => `
+          <li class="step-item">
+            <span class="step-num">${String(i + 1).padStart(2, '0')}</span>
+            <span class="step-text">${step}</span>
+          </li>`).join('');
+
+        const navLinks = `
+          <div class="recipe-nav">
+            ${prev ? `<a href="${prev.id}.html" class="recipe-nav-link recipe-nav-prev"><span class="nav-arrow">&larr;</span><span class="nav-label">上一道</span><span class="nav-name">${prev.name}</span></a>` : '<div></div>'}
+            <a href="../index.html#recipes" class="recipe-nav-home">全部菜谱</a>
+            ${next ? `<a href="${next.id}.html" class="recipe-nav-link recipe-nav-next"><span class="nav-label">下一道</span><span class="nav-name">${next.name}</span><span class="nav-arrow">&rarr;</span></a>` : '<div></div>'}
+          </div>`;
+
+        document.getElementById('recipe-detail').innerHTML = `
+          <!-- Hero -->
+          <div class="detail-hero">
+            ${heroImage}
+            <div class="detail-hero-overlay"></div>
+            <div class="detail-hero-content">
+              <div class="detail-badges">
+                <span class="badge badge-category">${recipe.category}</span>
+                <span class="badge badge-difficulty badge-${recipe.difficulty === '简单' ? 'easy' : recipe.difficulty === '中等' ? 'medium' : 'hard'}">${recipe.difficulty}</span>
+              </div>
+              <h1 class="detail-title">${recipe.name}</h1>
+              <p class="detail-title-en">${recipe.nameEn}</p>
+              <div class="detail-meta-bar">
+                <div class="detail-meta-item">
+                  <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <span>${recipe.time}</span>
+                </div>
+                <div class="detail-meta-divider"></div>
+                <div class="detail-meta-item">
+                  <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                  <span>${recipe.servings} 人份</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="detail-content">
+            <div class="detail-grid">
+              <!-- Ingredients -->
+              <aside class="detail-sidebar">
+                <div class="sidebar-section">
+                  <h3 class="sidebar-title">
+                    <span class="sidebar-line"></span>
+                    食材
+                    <span class="sidebar-title-en">Ingredients</span>
+                  </h3>
+                  <table class="ingredients-table">
+                    <tbody>${ingredientRows}</tbody>
+                  </table>
+                </div>
+              </aside>
+
+              <!-- Steps -->
+              <div class="detail-main">
+                <h3 class="steps-title">
+                  <span class="sidebar-line"></span>
+                  做法步骤
+                  <span class="sidebar-title-en">Steps</span>
+                </h3>
+                <ol class="steps-list">${stepItems}</ol>
+
+                <!-- Tips -->
+                <div class="tips-box">
+                  <span class="tips-label">💡 小贴士</span>
+                  <p class="tips-text">${recipe.tips}</p>
+                </div>
+              </div>
+            </div>
+
+            ${navLinks}
+          </div>`;
+      });
+  </script>
+
+</body>
+</html>
